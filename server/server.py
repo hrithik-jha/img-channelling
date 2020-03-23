@@ -3,14 +3,23 @@ import json
 import os
 from os import walk 
 import sys
+import cv2
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = '/img'
 
 def imgName():
     files = os.listdir('./img/')
     return str(len(files) + 1)
 
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/img'
+
+def splitChannels(imgFile):
+        b, g, r = cv2.split(imgFile)
+        cv2.imwrite('./channels/blue.jpg', b)
+        cv2.imwrite('./channels/green.jpg', g)
+        cv2.imwrite('./channels/red.jpg', r)
+        return createCompression()
 
 @app.route('/')
 def hello():
